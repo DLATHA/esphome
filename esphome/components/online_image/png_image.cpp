@@ -42,6 +42,7 @@ static void draw_callback(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, ui
 }
 
 void PngDecoder::prepare(uint32_t download_size) {
+  ESP_LOGE(TAG, "PngDecoder Prepare, size: %d", download_size);
   ImageDecoder::prepare(download_size);
   pngle_set_user_data(this->pngle_, this);
   pngle_set_init_callback(this->pngle_, init_callback);
@@ -49,18 +50,35 @@ void PngDecoder::prepare(uint32_t download_size) {
 }
 
 int HOT PngDecoder::decode(uint8_t *buffer, size_t size) {
+  // Ensure pngle_ is initialized
+  if (!this->pngle_) {
+    ESP_LOGE(TAG, "Decoder not initialized (pngle_ is NULL)");
+    return -1;  // Return error code for uninitialized decoder
+  }
+
+  // Check if buffer is valid
+  if (!buffer) {
+    ESP_LOGE(TAG, "Invalid buffer (NULL pointer)");
+    return -1;  // Return error code for invalid buffer
+  }
+
+  // Ensure enough data has been provided for processing
   if (size < 256 && size < this->download_size_ - this->decoded_bytes_) {
     ESP_LOGD(TAG, "Waiting for data");
     return 0;
   }
+
+  // Feed data to pngle and check for decoding errors
   auto fed = pngle_feed(this->pngle_, buffer, size);
   if (fed < 0) {
     ESP_LOGE(TAG, "Error decoding image: %s", pngle_error(this->pngle_));
   } else {
     this->decoded_bytes_ += fed;
   }
+
   return fed;
 }
+
 
 }  // namespace online_image
 }  // namespace esphome
