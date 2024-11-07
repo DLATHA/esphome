@@ -45,19 +45,30 @@ static void draw_callback(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, ui
 void PngDecoder::prepare(uint32_t download_size) {
   ESP_LOGD(TAG, "PngDecoder Prepare, size: %d", download_size);
   ImageDecoder::prepare(download_size);
-  pngle_set_user_data(this->pngle_, this);
+  
   if (!this->pngle_) {
     this->pngle_ = pngle_new();
-    ESP_LOGE(TAG, "pngle_set_user_data (pngle_ is NULL)");
+    ESP_LOGE(TAG, "pngle_ is NULL trying to recreate");
     if (!this->pngle_) {
       
       ESP_LOGE(TAG, "pngle is still null");
       
       
-      }
-    
+      }   
     
   }
+  else
+  {
+    ESP_LOGD(TAG, "pngle_ is NOT NULL");
+  }
+  
+  pngle_set_user_data(this->pngle_, this);
+  if (!this->pngle_) {
+
+    ESP_LOGE(TAG, "pngle_set_user_data (pngle_ is NULL)");
+    
+  }
+
   pngle_set_init_callback(this->pngle_, init_callback);
   if (!this->pngle_) {
     ESP_LOGE(TAG, "pngle_set_init_callback (pngle_ is NULL)");
