@@ -130,7 +130,12 @@ void OnlineImage::update() {
 
 #ifdef USE_ONLINE_IMAGE_PNG_SUPPORT
   if (this->format_ == ImageFormat::PNG) {
+    ESP_LOGD(TAG, "Image is PNG");
     this->decoder_ = esphome::make_unique<PngDecoder>(this);
+    if(!this->decoder_) {
+      ESP_LOGE(TAG, "Decoder is null");
+    }
+
   }
 #endif  // ONLINE_IMAGE_PNG_SUPPORT
 
