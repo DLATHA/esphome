@@ -45,8 +45,20 @@ void PngDecoder::prepare(uint32_t download_size) {
   ESP_LOGD(TAG, "PngDecoder Prepare, size: %d", download_size);
   ImageDecoder::prepare(download_size);
   pngle_set_user_data(this->pngle_, this);
+  if (!this->pngle_) {
+    ESP_LOGE(TAG, "pngle_set_user_data (pngle_ is NULL)");
+    
+  }
   pngle_set_init_callback(this->pngle_, init_callback);
+  if (!this->pngle_) {
+    ESP_LOGE(TAG, "pngle_set_init_callback (pngle_ is NULL)");
+    
+  }
   pngle_set_draw_callback(this->pngle_, draw_callback);
+  if (!this->pngle_) {
+    ESP_LOGE(TAG, "pngle_set_draw_callback (pngle_ is NULL)");
+    
+  }
 }
 
 int HOT PngDecoder::decode(uint8_t *buffer, size_t size) {
