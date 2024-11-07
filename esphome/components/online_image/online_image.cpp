@@ -171,6 +171,7 @@ void OnlineImage::loop() {
   }
   size_t available = this->download_buffer_.free_capacity();
   if (available) {
+    ESP_LOGD(TAG, "Buffer available: %d", available);
     auto len = this->downloader_->read(this->download_buffer_.append(), available);
     if (len > 0) {
       this->download_buffer_.write(len);
@@ -184,6 +185,8 @@ void OnlineImage::loop() {
       this->download_buffer_.read(fed);
     }
   }
+  else
+    ESP_LOGE(TAG, "Buffer Full");
 }
 
 void OnlineImage::draw_pixel_(int x, int y, Color color) {
