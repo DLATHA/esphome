@@ -1,7 +1,7 @@
 #include "online_image.h"
 
 #include "esphome/core/log.h"
-#include "esp.h"
+
 static const char *const TAG = "online_image";
 
 #include "image_decoder.h"

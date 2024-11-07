@@ -5,7 +5,7 @@
 #include "esphome/core/application.h"
 #include "esphome/core/helpers.h"
 #include "esphome/core/log.h"
-#include "esp.h"
+
 
 static const char *const TAG = "online_image.png";
 
