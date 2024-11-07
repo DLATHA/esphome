@@ -47,7 +47,15 @@ void PngDecoder::prepare(uint32_t download_size) {
   ImageDecoder::prepare(download_size);
   pngle_set_user_data(this->pngle_, this);
   if (!this->pngle_) {
+    this->pngle_ = pngle_new();
     ESP_LOGE(TAG, "pngle_set_user_data (pngle_ is NULL)");
+    if (!this->pngle_) {
+      
+      ESP_LOGE(TAG, "pngle is still null");
+      
+      
+      }
+    
     
   }
   pngle_set_init_callback(this->pngle_, init_callback);
