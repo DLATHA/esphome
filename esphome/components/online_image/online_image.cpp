@@ -1,7 +1,7 @@
 #include "online_image.h"
 
 #include "esphome/core/log.h"
-#include <Esp.h>
+
 
 static const char *const TAG = "online_image";
 
@@ -149,7 +149,7 @@ void OnlineImage::update() {
     return;
   }
 
-  uint32_t fh = ESP.getFreeHeap(); 
+
   this->decoder_->prepare(total_size);
   ESP_LOGI(TAG, "Downloading image");
 }
