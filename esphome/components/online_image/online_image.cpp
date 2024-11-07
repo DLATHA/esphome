@@ -187,8 +187,7 @@ void OnlineImage::loop() {
   }
   else
     ESP_LOGE(TAG, "Buffer Full");
-  else
-    ESP_LOGE(TAG, "Buffer Full");
+  
 }
 
 void OnlineImage::draw_pixel_(int x, int y, Color color) {
