@@ -126,14 +126,13 @@ void OnlineImage::update() {
     this->download_error_callback_.call();
     return;
   }
-  ESP_LOGD(TAG, "Free heap: %d", ESP.getFreeHeap());
+  
   ESP_LOGD(TAG, "Starting download");
   size_t total_size = this->downloader_->content_length;
 
 #ifdef USE_ONLINE_IMAGE_PNG_SUPPORT
   if (this->format_ == ImageFormat::PNG) {
     ESP_LOGD(TAG, "Image is PNG");
-    ESP_LOGD(TAG, "Free heap: %d", ESP.getFreeHeap());
     this->decoder_ = esphome::make_unique<PngDecoder>(this);
     if(!this->decoder_) {
       ESP_LOGE(TAG, "Decoder is null");
@@ -149,7 +148,6 @@ void OnlineImage::update() {
     return;
   }
   this->decoder_->prepare(total_size);
-  ESP_LOGD(TAG, "Free heap: %d", ESP.getFreeHeap());
   ESP_LOGI(TAG, "Downloading image");
 }
 
