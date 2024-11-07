@@ -43,6 +43,7 @@ static void draw_callback(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, ui
 }
 
 void PngDecoder::prepare(uint32_t download_size) {
+  ESP_LOGD(TAG, "Free heap before pngle_new(): %d", ESP.getFreeHeap());
   ESP_LOGD(TAG, "PngDecoder Prepare, size: %d", download_size);
   ImageDecoder::prepare(download_size);
   
