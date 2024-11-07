@@ -104,6 +104,7 @@ void OnlineImage::update() {
   }
 
   this->downloader_ = this->parent_->get(this->url_);
+  
 
   if (this->downloader_ == nullptr) {
     ESP_LOGE(TAG, "Download failed.");
@@ -113,6 +114,7 @@ void OnlineImage::update() {
   }
 
   int http_code = this->downloader_->status_code;
+  ESP_LOGD(TAG, "HTTP result: %d", http_code);
   if (http_code == HTTP_CODE_NOT_MODIFIED) {
     // Image hasn't changed on server. Skip download.
     this->end_connection_();
