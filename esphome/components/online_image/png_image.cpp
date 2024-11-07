@@ -20,6 +20,7 @@ namespace online_image {
  * @param h The height of the image.
  */
 static void init_callback(pngle_t *pngle, uint32_t w, uint32_t h) {
+  ESP_LOGD(TAG, "Initiate pngImage callback");
   PngDecoder *decoder = (PngDecoder *) pngle_get_user_data(pngle);
   decoder->set_size(w, h);
 }
