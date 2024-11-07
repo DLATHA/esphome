@@ -174,7 +174,7 @@ void OnlineImage::loop() {
   }
   size_t available = this->download_buffer_.free_capacity();
   if (available) {
-    ESP_LOGD(TAG, "Buffer available: %d", available);
+    //ESP_LOGD(TAG, "Buffer available: %d", available);
     auto len = this->downloader_->read(this->download_buffer_.append(), available);
     if (len > 0) {
       this->download_buffer_.write(len);
