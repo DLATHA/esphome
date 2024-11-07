@@ -149,7 +149,7 @@ void OnlineImage::update() {
     return;
   }
 
-  ESP_LOGD(TAG, "Free Heap: %d", ESP.getFreeHeap()); 
+  uint32_t fh = ESP.getFreeHeap(); 
   this->decoder_->prepare(total_size);
   ESP_LOGI(TAG, "Downloading image");
 }
