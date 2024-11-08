@@ -198,6 +198,7 @@ pngle_t *pngle_new() {
     // Allocate memory for inflator
     pngle->inflator = (tinfl_decompressor *)malloc(sizeof(tinfl_decompressor));
     if (!pngle->inflator) {
+		ESP_LOGD("TAG", "inflator issue");
   
         free(pngle); // Free the pngle structure if inflator allocation fails
         return NULL;
