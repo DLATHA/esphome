@@ -34,7 +34,7 @@ OnlineImage::OnlineImage(const std::string &url, int width, int height, ImageFor
       fixed_width_(width),
       fixed_height_(height) {
   this->set_url(url);
-  #define PNGLE_DEBUG(true)
+
   #if defined(USE_ESP32)
     ESP_LOGD("Memory Check", "Free heap before download: %d", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
     ESP_LOGD("Memory Check", "Free SPRAM before download: %d", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
