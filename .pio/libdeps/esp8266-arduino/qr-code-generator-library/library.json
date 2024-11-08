@@ -1,0 +1,16 @@
+{
+  "name": "qr-code-generator-library",
+  "version": "1.7.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wjtje/QR-Code-generator-esphome"
+  },
+  "authors": [
+    {
+      "name": "Wouter van der Wal",
+      "email": "me@wjtje.ga"
+    }
+  ],
+  "license": "MIT",
+  "headers": "qrcodegen.h"
+}

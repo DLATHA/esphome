@@ -132,7 +132,7 @@ tests/build/
 tests/.esphome/
 /.temp-clang-tidy.cpp
 /.temp/
-.pio/
+
 
 sdkconfig.*
 !sdkconfig.defaults

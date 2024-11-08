@@ -1,0 +1,18 @@
+os: linux
+language: python
+python: '3.7'
+
+install:
+  - pip install -U platformio
+
+matrix:
+  fast_finish: true
+  include:
+    - env: BOARD=nodemcuv2
+    - env: BOARD=nanoatmega328
+    - env: BOARD=nodemcu-32s
+    - env: BOARD=d1_mini
+
+script:
+  - pio ci examples/BatteryBlink/BatteryBlink.ino --lib ./ --board $BOARD
+  - pio ci examples/BatteryCharging/BatteryCharging.ino --lib ./ --board $BOARD
