@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
+#include "esphome/core/log.h"
 
 #include "miniz.h"
 #include "pngle.h"
