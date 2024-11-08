@@ -46,6 +46,9 @@ static void draw_callback(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, ui
 void PngDecoder::prepare(uint32_t download_size) {
   ESP_LOGD(TAG, "PngDecoder Prepare, size: %d", download_size);
   ImageDecoder::prepare(download_size);
+  #if defined(USE_ESP32)
+    ESP_LOGD("Memory Check", "Free heap prepare: %d", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
+  #endif
   
   if (!this->pngle_) {
     this->pngle_ = pngle_new();
@@ -87,7 +90,7 @@ void PngDecoder::prepare(uint32_t download_size) {
 int HOT PngDecoder::decode(uint8_t *buffer, size_t size) {
   // Ensure pngle_ is initialized
   #if defined(USE_ESP32)
-    ESP_LOGD("Memory Check", "Free heap pngle: %d", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
+    ESP_LOGD("Memory Check", "Free heap decode: %d", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
   #endif
   if (!this->pngle_) {
     ESP_LOGE(TAG, "Decoder not initialized (pngle_ is NULL)");
