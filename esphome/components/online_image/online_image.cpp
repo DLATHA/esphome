@@ -136,11 +136,16 @@ void OnlineImage::update() {
   size_t total_size = this->downloader_->content_length;
   ESP_LOGE(TAG, "Starting download. Size: %d", total_size);
   ESP_LOGE(TAG, "Image Format: %d", this->format_);
+  if (!this->decoder_) {
+    ESP_LOGE(TAG, "Decoder Null");
+  }
+  else
+    ESP_LOGE(TAG, "Decoder NOT Null");
 
 #ifdef USE_ONLINE_IMAGE_PNG_SUPPORT
   if (this->format_ == ImageFormat::PNG) {
     ESP_LOGD(TAG, "Image is PNG");
-    this->decoder_ = std::make_unique<PngDecoder>(this);
+    this->decoder_ = esphome::make_unique<PngDecoder>(this);
     if(!this->decoder_) {
       ESP_LOGE(TAG, "Decoder is null");
     }
