@@ -153,6 +153,7 @@ void OnlineImage::update() {
 
   #if defined(USE_ESP32)
     ESP_LOGD("Memory Check", "Free heap before download: %d", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
+    ESP_LOGD("Memory Check", "Free SPRAM before download: %d", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
   #endif
 
   this->decoder_->prepare(total_size);
@@ -183,6 +184,10 @@ void OnlineImage::loop() {
     auto len = this->downloader_->read(this->download_buffer_.append(), available);
     if (len > 0) {
       this->download_buffer_.write(len);
+      #if defined(USE_ESP32)
+        ESP_LOGD("Memory Check", "Free heap after buffer: %d", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
+        ESP_LOGD("Memory Check", "Free SPRAM afer buffer: %d", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
+      #endif
       auto fed = this->decoder_->decode(this->download_buffer_.data(), this->download_buffer_.unread());
       if (fed < 0) {
         ESP_LOGE(TAG, "Error when decoding image.");
