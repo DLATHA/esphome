@@ -34,6 +34,10 @@ OnlineImage::OnlineImage(const std::string &url, int width, int height, ImageFor
       fixed_width_(width),
       fixed_height_(height) {
   this->set_url(url);
+  #if defined(USE_ESP32)
+    ESP_LOGD("Memory Check", "Free heap before download: %d", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
+    ESP_LOGD("Memory Check", "Free SPRAM before download: %d", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
+  #endif
 }
 
 void OnlineImage::draw(int x, int y, display::Display *display, Color color_on, Color color_off) {
@@ -136,7 +140,7 @@ void OnlineImage::update() {
 #ifdef USE_ONLINE_IMAGE_PNG_SUPPORT
   if (this->format_ == ImageFormat::PNG) {
     ESP_LOGD(TAG, "Image is PNG");
-    this->decoder_ = esphome::make_unique<PngDecoder>(this);
+    this->decoder_ = std::make_unique<PngDecoder>(this);
     if(!this->decoder_) {
       ESP_LOGE(TAG, "Decoder is null");
     }
@@ -151,10 +155,7 @@ void OnlineImage::update() {
     return;
   }
 
-  #if defined(USE_ESP32)
-    ESP_LOGD("Memory Check", "Free heap before download: %d", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
-    ESP_LOGD("Memory Check", "Free SPRAM before download: %d", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
-  #endif
+  
 
   this->decoder_->prepare(total_size);
   ESP_LOGI(TAG, "Downloading image");
