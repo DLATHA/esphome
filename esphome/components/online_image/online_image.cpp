@@ -128,8 +128,10 @@ void OnlineImage::update() {
     return;
   }
   
-  ESP_LOGD(TAG, "Starting download");
+  
   size_t total_size = this->downloader_->content_length;
+  ESP_LOGE(TAG, "Starting download. Size: %d", total_size);
+  ESP_LOGE(TAG, "Image Format: %d", this->format_);
 
 #ifdef USE_ONLINE_IMAGE_PNG_SUPPORT
   if (this->format_ == ImageFormat::PNG) {
