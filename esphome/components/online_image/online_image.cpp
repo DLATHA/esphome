@@ -34,6 +34,7 @@ OnlineImage::OnlineImage(const std::string &url, int width, int height, ImageFor
       fixed_width_(width),
       fixed_height_(height) {
   this->set_url(url);
+  #define PNGLE_DEBUG;
   #if defined(USE_ESP32)
     ESP_LOGD("Memory Check", "Free heap before download: %d", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
     ESP_LOGD("Memory Check", "Free SPRAM before download: %d", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
@@ -136,11 +137,7 @@ void OnlineImage::update() {
   size_t total_size = this->downloader_->content_length;
   ESP_LOGE(TAG, "Starting download. Size: %d", total_size);
   ESP_LOGE(TAG, "Image Format: %d", this->format_);
-  if (!this->decoder_) {
-    ESP_LOGE(TAG, "Decoder Null");
-  }
-  else
-    ESP_LOGE(TAG, "Decoder NOT Null");
+  
 
 #ifdef USE_ONLINE_IMAGE_PNG_SUPPORT
   if (this->format_ == ImageFormat::PNG) {
