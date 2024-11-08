@@ -2,7 +2,7 @@
 
 #include "image_decoder.h"
 #ifdef USE_ONLINE_IMAGE_PNG_SUPPORT
-#include <pngle.h>
+#include "esphome/components/dlapngle/pngle.h"
 
 namespace esphome {
 namespace online_image {
