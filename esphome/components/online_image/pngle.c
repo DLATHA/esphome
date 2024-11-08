@@ -154,7 +154,7 @@ static inline uint32_t U32_CLAMP_ADD(uint32_t a, uint32_t b, uint32_t top)
 
 void pngle_reset(pngle_t *pngle)
 {
-	ESP_LOGD("PNGLE", "Reset");
+	
 	if (!pngle) return ;
 
 	pngle->state = PNGLE_STATE_INITIAL;
@@ -186,19 +186,19 @@ void pngle_reset(pngle_t *pngle)
         tinfl_init(pngle->inflator);
     } else {
         // Log a warning or error if inflator is unexpectedly NULL
-        ESP_LOGE("PNGLE", "Inflator is NULL during reset");
+
     }
 }
 
 pngle_t *pngle_new() {
-    ESP_LOGD("PNGLE", "Attempting to create pngle");
+
     pngle_t *pngle = (pngle_t *)PNGLE_CALLOC(1, sizeof(pngle_t), "pngle_t");
     if (!pngle) return NULL;
 
     // Allocate memory for inflator
     pngle->inflator = (tinfl_decompressor *)malloc(sizeof(tinfl_decompressor));
     if (!pngle->inflator) {
-        ESP_LOGE("PNGLE", "Failed to allocate memory for inflator");
+  
         free(pngle); // Free the pngle structure if inflator allocation fails
         return NULL;
     }
@@ -220,7 +220,7 @@ void pngle_destroy(pngle_t *pngle) {
 
 const char *pngle_error(pngle_t *pngle)
 {
-	ESP_LOGE("PNGLE", "%s", pngle->error);
+
 	if (!pngle) return "Uninitialized";
 	return pngle->error;
 }
