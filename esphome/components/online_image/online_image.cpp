@@ -103,7 +103,7 @@ void OnlineImage::update() {
   } else {
     ESP_LOGI(TAG, "Updating image");
   }
-
+  int fh = ESP.getFreeHeap();
   this->downloader_ = this->parent_->get(this->url_);
   
 

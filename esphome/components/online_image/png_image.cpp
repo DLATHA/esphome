@@ -51,7 +51,7 @@ void PngDecoder::prepare(uint32_t download_size) {
     this->pngle_ = pngle_new();
 
     ESP_LOGE(TAG, "pngle_ is NULL trying to recreate");
-    delay_microseconds_safe(2000);
+
     if (!this->pngle_) {
       
       ESP_LOGE(TAG, "pngle is still null");
