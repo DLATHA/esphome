@@ -1,7 +1,5 @@
 #include "online_image.h"
-#include <esp_heap_caps.h>
-#include <esp_system.h>
-#include <esp_chip_info.h>
+
 #include "esphome/core/log.h"
 
 
@@ -151,7 +149,9 @@ void OnlineImage::update() {
     return;
   }
 
-  ESP_LOGD("Memory Check", "Free heap before pngle_new(): %d", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
+  #if defined(USE_ESP32)
+    ESP_LOGD("Memory Check", "Free heap before download: %d", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
+  #endif
 
   this->decoder_->prepare(total_size);
   ESP_LOGI(TAG, "Downloading image");

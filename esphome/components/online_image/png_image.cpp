@@ -86,6 +86,9 @@ void PngDecoder::prepare(uint32_t download_size) {
 
 int HOT PngDecoder::decode(uint8_t *buffer, size_t size) {
   // Ensure pngle_ is initialized
+  #if defined(USE_ESP32)
+    ESP_LOGD("Memory Check", "Free heap pngle: %d", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
+  #endif
   if (!this->pngle_) {
     ESP_LOGE(TAG, "Decoder not initialized (pngle_ is NULL)");
     return -1;  // Return error code for uninitialized decoder
