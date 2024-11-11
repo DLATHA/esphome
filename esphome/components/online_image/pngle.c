@@ -202,7 +202,7 @@ pngle_t *pngle_new() {
 		
   
         free(pngle); // Free the pngle structure if inflator allocation fails
-        return "NULL";
+        return NULL;
     }
 
     pngle_reset(pngle);
