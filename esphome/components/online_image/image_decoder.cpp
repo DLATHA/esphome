@@ -1,6 +1,6 @@
 #include "image_decoder.h"
 #include "online_image.h"
-
+#include "esphome/core/  // Include this for PSRAM allocation functions
 #include "esphome/core/log.h"
 
 namespace esphome {
@@ -8,37 +8,76 @@ namespace online_image {
 
 static const char *const TAG = "online_image.decoder";
 
-void ImageDecoder::set_size(int width, int height) {
-  this->image_->resize_(width, height);
-  this->x_scale_ = static_cast<double>(this->image_->buffer_width_) / width;
-  this->y_scale_ = static_cast<double>(this->image_->buffer_height_) / height;
-}
+class DownloadBuffer {
+ public:
+  DownloadBuffer(size_t size) : size_(size) {
+    // Allocate the buffer in PSRAM if available
+    this->buffer_ = (uint8_t *)heap_caps_malloc(size, MALLOC_CAP_SPIRAM);
+    if (!this->buffer_) {
+      ESP_LOGE(TAG, "Failed to allocate buffer in PSRAM. Falling back to internal RAM.");
+      this->buffer_ = (uint8_t *)heap_caps_malloc(size, MALLOC_CAP_DEFAULT);
+      if (!this->buffer_) {
+        ESP_LOGE(TAG, "Failed to allocate buffer in internal RAM as well. Out of memory!");
+      }
+    }
+    this->reset();
+  }
 
-void ImageDecoder::draw(int x, int y, int w, int h, const Color &color) {
-  auto width = std::min(this->image_->buffer_width_, static_cast<int>(std::ceil((x + w) * this->x_scale_)));
-  auto height = std::min(this->image_->buffer_height_, static_cast<int>(std::ceil((y + h) * this->y_scale_)));
-  for (int i = x * this->x_scale_; i < width; i++) {
-    for (int j = y * this->y_scale_; j < height; j++) {
-      this->image_->draw_pixel_(i, j, color);
+  virtual ~DownloadBuffer() {
+    if (this->buffer_) {
+      free(this->buffer_);
     }
   }
-}
 
-uint8_t *DownloadBuffer::data(size_t offset) {
-  if (offset > this->size_) {
-    ESP_LOGE(TAG, "Tried to access beyond download buffer bounds!!!");
-    return this->buffer_;
+  uint8_t *data(size_t offset = 0) {
+    if (offset > this->size_) {
+      ESP_LOGE(TAG, "Tried to access beyond download buffer bounds!!!");
+      return this->buffer_;
+    }
+    return this->buffer_ + offset;
   }
-  return this->buffer_ + offset;
-}
 
-size_t DownloadBuffer::read(size_t len) {
-  this->unread_ -= len;
-  if (this->unread_ > 0) {
-    memmove(this->data(), this->data(len), this->unread_);
+  size_t read(size_t len) {
+    if (len > this->unread_) {
+      len = this->unread_;
+    }
+    this->unread_ -= len;
+    if (this->unread_ > 0) {
+      memmove(this->data(), this->data(len), this->unread_);
+    }
+    return this->unread_;
   }
-  return this->unread_;
-}
+
+  void reset() {
+    this->unread_ = 0;
+  }
+
+  size_t unread() const {
+    return this->unread_;
+  }
+
+  size_t size() const {
+    return this->size_;
+  }
+
+  size_t free_capacity() const {
+    return this->size_ - this->unread_;
+  }
+
+  uint8_t *append() {
+    return this->data(this->unread_);
+  }
+
+  size_t write(size_t len) {
+    this->unread_ += len;
+    return this->unread_;
+  }
+
+ protected:
+  uint8_t *buffer_;
+  size_t size_;
+  size_t unread_;
+};
 
 }  // namespace online_image
 }  // namespace esphome
